@@ -4,6 +4,7 @@
   import { loadState, saveState } from '../../lib/store';
 
   const byId = Object.fromEntries(questions.map((q) => [q.id, q]));
+  const easyIds = new Set(questions.filter((q) => q.difficulty === 'easy').map((q) => q.id));
 
   function shuffle(ids: number[]): number[] {
     const arr = [...ids];
@@ -18,45 +19,69 @@
   let shuffled = $state<number[]>([]);
   let pointer = $state(0);
   let cycles = $state(0);
+  let batchSize = $state(3);
+  let ignoreEasy = $state(false);
 
-  const batch = $derived(shuffled.slice(pointer, pointer + 3));
+  const activeTotal = $derived(ignoreEasy ? questions.length - easyIds.size : questions.length);
+
+  const batch = $derived(
+    shuffled
+      .slice(pointer)
+      .filter((id) => !ignoreEasy || !easyIds.has(id))
+      .slice(0, batchSize)
+  );
+
+  const doneSoFar = $derived(
+    shuffled.slice(0, pointer).filter((id) => !ignoreEasy || !easyIds.has(id)).length
+  );
 
   onMount(async () => {
     const s = await loadState();
     cycles = s.cycles;
     pointer = s.pointer;
     revealed = s.revealed;
+    batchSize = s.batchSize;
+    ignoreEasy = s.ignoreEasy;
     shuffled = s.shuffled.length > 0
       ? s.shuffled
       : shuffle(questions.map((q) => q.id));
     if (s.shuffled.length === 0) {
-      await saveState({ shuffled: [...shuffled], pointer, cycles, revealed });
+      await saveState({ shuffled: [...shuffled], pointer, cycles, revealed, batchSize, ignoreEasy });
     }
   });
 
   async function setRevealed(value: boolean) {
     revealed = value;
-    await saveState({ shuffled: [...shuffled], pointer, cycles, revealed: value });
+    await saveState({ shuffled: [...shuffled], pointer, cycles, revealed: value, batchSize, ignoreEasy });
   }
 
   async function finish() {
-    const nextPointer = pointer + batch.length;
-    if (nextPointer >= questions.length) {
+    // advance pointer past the batch, skipping easy questions if needed
+    let remaining = batch.length;
+    let next = pointer;
+    while (remaining > 0 && next < shuffled.length) {
+      if (!ignoreEasy || !easyIds.has(shuffled[next])) remaining--;
+      next++;
+    }
+    // also skip any trailing easy questions at the new pointer position
+    while (ignoreEasy && next < shuffled.length && easyIds.has(shuffled[next])) next++;
+
+    if (next >= shuffled.length) {
       cycles += 1;
       pointer = 0;
       shuffled = shuffle(questions.map((q) => q.id));
     } else {
-      pointer = nextPointer;
+      pointer = next;
     }
     revealed = false;
-    await saveState({ shuffled: [...shuffled], pointer, cycles, revealed: false });
+    await saveState({ shuffled: [...shuffled], pointer, cycles, revealed: false, batchSize, ignoreEasy });
   }
 </script>
 
 <main>
   {#if !revealed}
-    <p class="progress">{pointer} / {questions.length} done &middot; {cycles} cycles</p>
-    <button onclick={() => setRevealed(true)}>Get 3 Questions</button>
+    <p class="progress">{doneSoFar} / {activeTotal} done &middot; {cycles} cycles</p>
+    <button onclick={() => setRevealed(true)}>Get {batchSize} Questions</button>
   {:else}
     <ul>
       {#each batch as id}
