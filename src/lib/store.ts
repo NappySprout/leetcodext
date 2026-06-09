@@ -8,7 +8,7 @@ export interface State {
 }
 
 export async function loadState(): Promise<State> {
-  const s = await chrome.storage.local.get(['shuffled', 'pointer', 'cycles', 'revealed', 'batchSize', 'ignoreEasy']);
+  const s = await chrome.storage.sync.get(['shuffled', 'pointer', 'cycles', 'revealed', 'batchSize', 'ignoreEasy']);
   return {
     shuffled: s.shuffled ?? [],
     pointer: s.pointer ?? 0,
@@ -20,5 +20,5 @@ export async function loadState(): Promise<State> {
 }
 
 export async function saveState(state: State): Promise<void> {
-  await chrome.storage.local.set(state);
+  await chrome.storage.sync.set(state);
 }
