@@ -3,15 +3,9 @@
   import focusImg from '../assets/focus.png';
   import angryImg from '../assets/angry.png';
   import lotusImg from '../assets/lotus.png';
+  import taunts from './taunts.json';
 
   let { revealed = false }: { revealed: boolean } = $props();
-
-  const taunts = [
-    'Junior, You Dare!',
-    'Kowtow Before Me!',
-    'Courting Death?!',
-    'I will erase your seven generations!',
-  ];
 
   let squish = $state(false);
   let angry = $state(false);
