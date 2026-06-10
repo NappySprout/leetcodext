@@ -64,12 +64,14 @@
     margin: 2rem auto;
     padding: 0 1rem;
     font-family: inherit;
+    color: #1a2a3a;
   }
 
   h2 {
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 700;
     margin: 1.5rem 0 0.75rem;
+    color: #1a2a3a;
   }
 
   .settings {
@@ -83,21 +85,33 @@
     align-items: center;
     gap: 0.75rem;
     font-size: 0.9rem;
+    color: #1a2a3a;
   }
 
   input[type='number'] {
     width: 4rem;
     padding: 0.3rem 0.5rem;
     border-radius: 6px;
-    border: 1px solid #444;
-    background: #1a1a1a;
-    color: inherit;
+    border: 1px solid rgba(0,0,0,0.25);
+    background: rgba(255,255,255,0.6);
+    color: #1a2a3a;
     font-size: 0.9rem;
     text-align: center;
   }
 
   button {
     margin-top: 0.75rem;
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    border: 1px solid rgba(0,0,0,0.25);
+    background: rgba(255,255,255,0.6);
+    color: #1a2a3a;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: rgba(255,255,255,0.8);
   }
 
   ul {
@@ -123,16 +137,17 @@
   li.hidden { display: none; }
 
   .index {
-    color: #888;
+    color: #2c4a6e;
     min-width: 2rem;
     text-align: right;
     flex-shrink: 0;
   }
 
   a {
-    color: #646cff;
+    color: #1a3a6e;
     text-decoration: none;
     flex: 1;
+    font-weight: 500;
   }
 
   a:hover { text-decoration: underline; }
@@ -145,22 +160,12 @@
     flex-shrink: 0;
   }
 
-  .diff.easy { background: #1a3a1a; color: #4caf50; }
-  .diff.medium { background: #3a2a0a; color: #ff9800; }
-  .diff.hard { background: #3a1a1a; color: #f44336; }
+  .diff.easy { background: #e8f5e9; color: #2e7d32; }
+  .diff.medium { background: #fff3e0; color: #e65100; }
+  .diff.hard { background: #fce4ec; color: #c62828; }
 
   .check {
-    color: #4caf50;
+    color: #2e7d32;
     flex-shrink: 0;
-  }
-
-  @media (prefers-color-scheme: light) {
-    input[type='number'] {
-      background: #f9f9f9;
-      border-color: #ccc;
-    }
-    .diff.easy { background: #e8f5e9; color: #2e7d32; }
-    .diff.medium { background: #fff3e0; color: #e65100; }
-    .diff.hard { background: #fce4ec; color: #c62828; }
   }
 </style>
