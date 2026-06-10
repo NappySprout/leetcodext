@@ -1,7 +1,55 @@
-# WXT + Svelte
+# Code Cultivator
 
-This template should help get you started developing with Svelte in WXT.
+> *"A mere ant dares to look up at the heavens?!"*
 
-## Recommended IDE Setup
+A Chrome extension for grinding [Grind 169](https://www.techinterviewhandbook.org/grind75/) — dressed in the aesthetic of a xianxia cultivation novel.
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+Your progress is your **Qi**. Each completed batch advances your realm. Slack off and the Elder will let you know.
+
+---
+
+## Features
+
+- Serves a configurable batch of random unseen questions per session
+- Tracks progress across cycles — completing all 169 shuffles the queue and starts a new cycle
+- Syncs progress across devices via your Chrome profile
+- Poke the cultivator. He has opinions.
+- Options page to configure batch size, skip easy questions, and review your full progress list
+
+## Installation
+
+1. Clone the repo and install dependencies:
+   ```bash
+   git clone https://github.com/NappySprout/code-cultivator.git
+   cd code-cultivator
+   bun install
+   ```
+
+2. Build the extension:
+   ```bash
+   bun run build
+   ```
+
+3. Load into Chrome:
+   - Go to `chrome://extensions`
+   - Enable **Developer mode**
+   - Click **Load unpacked** and select the `.output/chrome-mv3` folder
+
+## Development
+
+```bash
+bun run dev
+```
+
+WXT opens a browser window with the extension hot-reloaded on save.
+
+## Tech Stack
+
+- [WXT](https://wxt.dev/) — Web Extension Framework
+- [Svelte 5](https://svelte.dev/) — UI with runes
+- TypeScript
+- `chrome.storage.sync` for persistence
+
+## License
+
+MIT — see [LICENSE](./LICENSE)
